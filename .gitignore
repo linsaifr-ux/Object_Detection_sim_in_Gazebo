@@ -1,0 +1,17 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# ROS 2 build artifacts
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Model weights (too large — downloaded automatically on first run)
+models/*.pt
+models/*.engine
+
+# OS
+.DS_Store
