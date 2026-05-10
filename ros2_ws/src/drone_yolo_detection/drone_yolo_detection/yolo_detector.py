@@ -8,9 +8,15 @@ import cv2
 import json
 import os
 
-MODEL_PATH = os.path.expanduser(
-    '~/文件/Project/Object_Detection_sim_in_Gazebo/models/yolov8l.pt'
-)
+def _resolve_model():
+    base = os.path.expanduser('~/文件/Project/Object_Detection_sim_in_Gazebo/models')
+    for name in ('yolov8l_custom.pt', 'yolov8l_visdrone.pt', 'yolov8l.pt'):
+        path = os.path.join(base, name)
+        if os.path.exists(path):
+            return path
+    return os.path.join(base, 'yolov8l.pt')
+
+DEFAULT_MODEL = _resolve_model()
 
 ENCODING_CHANNELS = {
     'rgb8': ('RGB', 3), 'bgr8': ('BGR', 3),
@@ -54,17 +60,19 @@ class YoloDetectorNode(Node):
         super().__init__('yolo_detector')
 
         self.declare_parameter('camera_topic', '/drone/camera/image_raw')
-        self.declare_parameter('confidence', 0.45)
+        self.declare_parameter('confidence', 0.35)
         self.declare_parameter('device', 'cuda:0')
         self.declare_parameter('imgsz', 640)
+        self.declare_parameter('model_path', DEFAULT_MODEL)
 
         camera_topic = self.get_parameter('camera_topic').value
         self.conf = self.get_parameter('confidence').value
         self.device = self.get_parameter('device').value
         self.imgsz = self.get_parameter('imgsz').value
+        model_path = self.get_parameter('model_path').value
 
-        self.get_logger().info(f'Loading YOLOv8l from {MODEL_PATH}')
-        self.model = YOLO(MODEL_PATH)
+        self.get_logger().info(f'Loading model from {model_path}')
+        self.model = YOLO(model_path)
         self.model.to(self.device)
         self.get_logger().info(f'YOLOv8l loaded on {self.device}')
 

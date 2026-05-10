@@ -15,12 +15,18 @@ export PYTHONPATH="$VENV/lib/python3.12/site-packages:$PYTHONPATH"
 # Let Gazebo find textures via model://drone_yolo_detection/...
 export GZ_SIM_RESOURCE_PATH="$WS/install/drone_yolo_detection/share:$GZ_SIM_RESOURCE_PATH"
 
-# Point to downloaded YOLOv8l weights
-export YOLO_MODEL="$PROJECT_DIR/models/yolov8l.pt"
+# Use custom-trained model (falls back to base if not found)
+if [ -f "$PROJECT_DIR/models/yolov8l_custom.pt" ]; then
+    export YOLO_MODEL="$PROJECT_DIR/models/yolov8l_custom.pt"
+    MODEL_LABEL="yolov8l_custom (cube/cylinder)"
+else
+    export YOLO_MODEL="$PROJECT_DIR/models/yolov8l.pt"
+    MODEL_LABEL="yolov8l (COCO 80 classes)"
+fi
 
 echo "Starting Drone YOLOv8l Detection Simulation..."
 echo "  Gazebo world  : drone_detection.sdf"
-echo "  Model         : yolov8l (COCO 80 classes)"
+echo "  Model         : $MODEL_LABEL"
 echo "  GPU           : $(python3 -c 'import torch; print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU")')"
 echo ""
 echo "Controls: close the OpenCV window or press Ctrl+C to stop."

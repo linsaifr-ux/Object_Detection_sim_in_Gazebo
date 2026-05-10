@@ -1,0 +1,1 @@
+/home/frank/文件/Project/Object_Detection_sim_in_Gazebo/ros2_ws/src/drone_yolo_detection/setup.py

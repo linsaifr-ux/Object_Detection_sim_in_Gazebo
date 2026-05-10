@@ -1,0 +1,8 @@
+path: /home/frank/文件/Project/Object_Detection_sim_in_Gazebo/datasets/custom_shapes
+train: images/train
+val:   images/val
+
+nc: 2
+names:
+  0: cube
+  1: cylinder

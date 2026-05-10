@@ -28,6 +28,7 @@ setup(
             'yolo_detector = drone_yolo_detection.yolo_detector:main',
             'detection_visualizer = drone_yolo_detection.detection_visualizer:main',
             'flight_controller = drone_yolo_detection.flight_controller:main',
+            'data_collector = drone_yolo_detection.data_collector:main',
         ],
     },
 )
